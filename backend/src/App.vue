@@ -1,5 +1,7 @@
 <script setup></script>
 
-<template>Vue.js</template>
+<template>
+  <router-view />
+</template>
 
 <style></style>
