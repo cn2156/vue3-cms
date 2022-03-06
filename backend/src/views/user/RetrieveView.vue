@@ -3,13 +3,10 @@ import { ref, computed } from "vue";
 import {
   getUser,
   getAllowBackendsValues,
-  getAllowBackends,
   getSourceText,
   getSourceColors,
-  getSources,
   getStatusText,
   getStatusColors,
-  getStatuses,
 } from "@/api/user";
 
 const props = defineProps({
