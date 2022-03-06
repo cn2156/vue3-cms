@@ -1,3 +1,5 @@
+@import "./variables.scss";
+
 html,
 body,
 h1,
@@ -23,5 +25,54 @@ body,
 }
 
 body {
+  color: #333;
   background-color: #f3f3f3;
+}
+
+.flex {
+  display: flex;
+
+  &.flex-column {
+    flex-direction: column;
+  }
+
+  &.flex-center {
+    justify-content: center;
+  }
+
+  &.flex-between {
+    justify-content: space-between;
+  }
+
+  &.flex-middle {
+    align-items: center;
+  }
+}
+
+.color-primary {
+  color: $color-primary;
+}
+
+.color-success {
+  color: $color-success;
+}
+
+.color-info {
+  color: $color-info;
+}
+
+.color-warning {
+  color: $color-warning;
+}
+
+.color-danger {
+  color: $color-danger;
+}
+
+.mt20 {
+  margin-top: 20px;
+}
+
+.description-label {
+  width: 20%;
 }

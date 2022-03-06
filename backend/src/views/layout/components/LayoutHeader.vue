@@ -1,5 +1,5 @@
 <script setup>
-import { Expand, Fold, UserFilled } from "@element-plus/icons-vue";
+import { Expand, Fold } from "@element-plus/icons-vue";
 
 import { useBreadcrumbStore } from "@/stores/breadcrumb";
 const breadcrumbStore = useBreadcrumbStore();
@@ -15,6 +15,34 @@ const emits = defineEmits(["collapseChange"]);
 
 function handleCollapse() {
   emits("collapseChange", !props.collapsed);
+}
+
+import { useUserStore } from "@/stores/user";
+const userStore = useUserStore();
+import { ref } from "vue";
+
+const user = ref({});
+if (userStore.user) {
+  user.value = userStore.user;
+}
+
+import { useRouter } from "vue-router";
+const router = useRouter();
+
+import { ElMessage, ElMessageBox } from "element-plus";
+
+function handleLogout() {
+  ElMessageBox.confirm("确认退出吗？", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(() => {
+      userStore.setUser(null);
+      ElMessage.success("退出成功");
+      router.push("/login");
+    })
+    .catch(() => {});
 }
 </script>
 
@@ -36,13 +64,15 @@ function handleCollapse() {
     </el-breadcrumb>
     <el-dropdown>
       <span class="el-dropdown-link">
-        <el-avatar :icon="UserFilled" :size="30"></el-avatar>
+        <el-avatar :src="user.avatar" :size="30"></el-avatar>
       </span>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item>个人中心</el-dropdown-item>
+          <el-dropdown-item>{{ user.name }}</el-dropdown-item>
           <el-dropdown-item>修改密码</el-dropdown-item>
-          <el-dropdown-item divided>退出</el-dropdown-item>
+          <el-dropdown-item divided @click="handleLogout">
+            退出
+          </el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
