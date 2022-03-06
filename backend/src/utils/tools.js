@@ -21,10 +21,10 @@ export const getObjectPropertyValue = (obj, prop, value) => {
  * @param {Object} obj 数据
  * @returns {Object}
  */
-export const getObjectProperties = (obj) => {
+export const getObjectProperties = (obj, prop = "value") => {
   let properties = {};
   for (let item in obj) {
-    properties[item] = obj[item].value;
+    properties[item] = obj[item][prop];
   }
   return properties;
 };

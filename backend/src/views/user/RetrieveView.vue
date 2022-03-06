@@ -2,12 +2,13 @@
 import { ref, computed } from "vue";
 import {
   getUser,
+  getFields,
   getAllowBackendsValues,
   getSourceText,
   getSourceColors,
   getStatusText,
   getStatusColors,
-} from "@/api/user";
+} from "../../api/user";
 
 const props = defineProps({
   id: {
@@ -25,6 +26,8 @@ const getUserInfo = async () => {
 
 const userInfo = ref({});
 getUserInfo();
+
+const fields = getFields();
 
 const sourceText = computed(() => {
   return (value) => getSourceText(value);
@@ -61,25 +64,27 @@ const statusColor = computed(() =>
       </div>
     </template>
     <el-descriptions :column="1" border>
-      <el-descriptions-item label="ID" label-class-name="description-label">{{
-        userInfo.id
-      }}</el-descriptions-item>
-      <el-descriptions-item label="手机号">{{
+      <el-descriptions-item
+        :label="fields.id"
+        label-class-name="description-label"
+        >{{ userInfo.id }}</el-descriptions-item
+      >
+      <el-descriptions-item :label="fields.phone">{{
         userInfo.phone
       }}</el-descriptions-item>
-      <el-descriptions-item label="姓名">{{
+      <el-descriptions-item :label="fields.name">{{
         userInfo.name
       }}</el-descriptions-item>
-      <el-descriptions-item label="头像"
+      <el-descriptions-item :label="fields.avatar"
         ><img
           v-if="userInfo.avatar"
           :src="userInfo.avatar"
           style="height: 40px"
       /></el-descriptions-item>
-      <el-descriptions-item label="来源">
+      <el-descriptions-item :label="fields.source">
         <span :class="[sourceColor]">{{ sourceText(userInfo.source) }}</span>
       </el-descriptions-item>
-      <el-descriptions-item label="允许登录后台">
+      <el-descriptions-item :label="fields.allow_backend">
         <el-switch
           v-model="userInfo.allow_backend"
           :active-value="allowBackendsValues.ENABLED"
@@ -87,7 +92,7 @@ const statusColor = computed(() =>
           :before-change="handleChange"
         ></el-switch>
       </el-descriptions-item>
-      <el-descriptions-item label="状态">
+      <el-descriptions-item :label="fields.status">
         <span :class="[statusColor]">{{ statusText(userInfo.status) }}</span>
       </el-descriptions-item>
     </el-descriptions>

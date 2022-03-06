@@ -4,10 +4,11 @@ import md5 from "md5";
 import UploadFile from "@/components/UploadFile.vue";
 import {
   getUser,
+  getFields,
   getStatuses,
   getStatusDefaultValue,
   getAllowBackendsValues,
-} from "@/api/user";
+} from "../../../api/user";
 
 const props = defineProps({
   id: {
@@ -16,6 +17,7 @@ const props = defineProps({
   },
 });
 
+const fields = getFields();
 const statuses = getStatuses();
 const allowBackendsValues = getAllowBackendsValues();
 
@@ -138,26 +140,30 @@ const submitForm = async (formEl) => {
 
 <template>
   <el-form ref="formRef" :model="form" :rules="rules" label-width="120px">
-    <el-form-item label="手机号" prop="phone">
+    <el-form-item :label="fields.phone" prop="phone">
       <el-input v-model="form.phone" autocomplete="off"></el-input>
     </el-form-item>
-    <el-form-item label="姓名" prop="name">
+    <el-form-item :label="fields.name" prop="name">
       <el-input v-model="form.name"></el-input>
     </el-form-item>
-    <el-form-item label="头像" prop="avatar">
+    <el-form-item :label="fields.avatar" prop="avatar">
       <UploadFile v-model:avatar="form.avatar" />
     </el-form-item>
-    <el-form-item label="允许登录后台" prop="allow_backend">
+    <el-form-item :label="fields.allow_backend" prop="allow_backend">
       <el-switch
         v-model="form.allow_backend"
         :active-value="allowBackendsValues.ENABLED"
         :inactive-value="allowBackendsValues.DISABLED"
       ></el-switch>
     </el-form-item>
-    <el-form-item label="密码" prop="pwd">
-      <el-input type="password" v-model="form.pwd"></el-input>
+    <el-form-item :label="fields.pwd" prop="pwd">
+      <el-input
+        type="password"
+        v-model="form.pwd"
+        :placeholder="form.id ? '不更改密码请留空' : ''"
+      ></el-input>
     </el-form-item>
-    <el-form-item label="状态">
+    <el-form-item :label="fields.status">
       <el-select v-model="form.status" placeholder="请选择状态">
         <el-option
           v-for="(status, key) in statuses"

@@ -1,8 +1,9 @@
 <script setup>
 import { ref, reactive, computed } from "vue";
-import configPagination from "@/config/pagination";
+import configPagination from "../../config/pagination";
 import {
   getUsers,
+  getFields,
   getAllowBackendsValues,
   getAllowBackends,
   getSourceText,
@@ -13,8 +14,9 @@ import {
   getStatuses,
   updateUser,
   deleteUser,
-} from "@/api/user";
+} from "../../api/user";
 
+const fields = getFields();
 const statuses = getStatuses();
 const sources = getSources();
 const allowBackends = getAllowBackends();
@@ -163,13 +165,13 @@ const handleDelete = (row) => {
     </template>
 
     <el-form ref="formRef" :model="form" inline size="small">
-      <el-form-item label="手机号" prop="phone">
+      <el-form-item :label="fields.phone" prop="phone">
         <el-input v-model="form.phone"></el-input>
       </el-form-item>
-      <el-form-item label="姓名" prop="name">
+      <el-form-item :label="fields.name" prop="name">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
-      <el-form-item label="来源" prop="source">
+      <el-form-item :label="fields.source" prop="source">
         <el-select v-model="form.source" placeholder="请选择">
           <el-option label="请选择" :value="''"></el-option>
           <el-option
@@ -180,7 +182,7 @@ const handleDelete = (row) => {
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="允许登录后台" prop="allow_backend">
+      <el-form-item :label="fields.allow_backend" prop="allow_backend">
         <el-select v-model="form.allow_backend" placeholder="请选择">
           <el-option label="请选择" :value="''"></el-option>
           <el-option
@@ -191,7 +193,7 @@ const handleDelete = (row) => {
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="状态" prop="status">
+      <el-form-item :label="fields.status" prop="status">
         <el-select v-model="form.status" placeholder="请选择">
           <el-option label="请选择" :value="''"></el-option>
           <el-option
@@ -223,10 +225,10 @@ const handleDelete = (row) => {
       style="width: 100%"
       v-loading="loading"
     >
-      <el-table-column prop="id" label="ID" width="80" />
-      <el-table-column prop="phone" label="手机号" />
-      <el-table-column prop="name" label="姓名" />
-      <el-table-column prop="avatar" label="头像">
+      <el-table-column prop="id" :label="fields.id" width="80" />
+      <el-table-column prop="phone" :label="fields.phone" />
+      <el-table-column prop="name" :label="fields.name" />
+      <el-table-column prop="avatar" :label="fields.avatar">
         <template #default="scope">
           <img
             v-if="scope.row.avatar"
@@ -235,12 +237,16 @@ const handleDelete = (row) => {
           />
         </template>
       </el-table-column>
-      <el-table-column prop="source" label="来源" align="center">
+      <el-table-column prop="source" :label="fields.source" align="center">
         <template #default="scope">
           {{ sourceText(scope.row.source) }}
         </template>
       </el-table-column>
-      <el-table-column prop="allow_backend" label="允许登录后台" align="center">
+      <el-table-column
+        prop="allow_backend"
+        :label="fields.allow_backend"
+        align="center"
+      >
         <template #default="scope">
           <el-switch
             v-model="scope.row.allow_backend"
@@ -250,7 +256,7 @@ const handleDelete = (row) => {
           ></el-switch>
         </template>
       </el-table-column>
-      <el-table-column prop="status" label="状态" align="center">
+      <el-table-column prop="status" :label="fields.status" align="center">
         <template #default="scope">
           {{ statusText(scope.row.status) }}
         </template>

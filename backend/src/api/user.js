@@ -6,6 +6,50 @@ import {
 } from "../utils/tools";
 
 /**
+ * 字段
+ */
+const fields = {
+  id: {
+    text: "ID",
+  },
+  phone: {
+    text: "手机号",
+  },
+  pwd: {
+    text: "密码",
+  },
+  name: {
+    text: "姓名",
+  },
+  avatar: {
+    text: "头像",
+  },
+  allow_backend: {
+    text: "允许登录后台",
+  },
+  source: {
+    text: "来源",
+  },
+  status: {
+    text: "状态",
+  },
+};
+
+/**
+ * 获得字段文本
+ * @param {String}} field 字段
+ * @returns {String}
+ */
+export const getFieldText = (field) =>
+  getObjectPropertyValue(fields, "text", field);
+
+/**
+ * 获得字段和文本
+ * @returns {Object}
+ */
+export const getFields = () => getObjectProperties(fields, "text");
+
+/**
  * 状态
  */
 const statuses = {
