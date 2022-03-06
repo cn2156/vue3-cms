@@ -53,7 +53,7 @@ export const getStatusColors = () =>
 export const getStatuses = () => getObjectValueProperties(statuses, "text");
 
 /**
- * 获得默认状态值
+ * 获得状态默认值
  * @returns {Number}
  */
 export const getStatusDefaultValue = () => statuses.ACTIVED.value;
@@ -75,13 +75,13 @@ const allowBackends = {
 };
 
 /**
- * 获得属性和值
+ * 获得是否可以登录后台属性和值
  * @returns {Object}
  */
 export const getAllowBackendsValues = () => getObjectProperties(allowBackends);
 
 /**
- * 获得值和文本
+ * 获得是否可以登录后台值和文本
  * @returns {Object}
  */
 export const getAllowBackends = () =>
@@ -222,6 +222,11 @@ export const getTotal = async (params) => {
   return res.data.length;
 };
 
+/**
+ * 创建或更新用户
+ * @param {Object} data 数据
+ * @returns {Object}
+ */
 export const createOrUpdateUser = async (data) => {
   if (data.id) {
     return updateUser(data);
@@ -255,6 +260,11 @@ export const createUser = async (data) => {
   });
 };
 
+/**
+ * 创建会员
+ * @param {Object} data 数据
+ * @returns {Object}
+ */
 // export const createMember = (data) =>
 //   request({
 //     method: "POST",
@@ -262,6 +272,11 @@ export const createUser = async (data) => {
 //     data,
 //   });
 
+/**
+ * 更新用户
+ * @param {Object} data 数据
+ * @returns {Object}
+ */
 export const updateUser = async (data) => {
   // search
   const res = await getUsers({ phone: data.phone });
@@ -282,6 +297,11 @@ export const updateUser = async (data) => {
   });
 };
 
+/**
+ * 删除用户
+ * @param {Object} id ID
+ * @returns {Object}
+ */
 export const deleteUser = (id) =>
   request({
     method: "DELETE",
