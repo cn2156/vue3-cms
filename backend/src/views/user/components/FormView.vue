@@ -182,9 +182,7 @@ const resetForm = (formEl) => {
       <el-button type="primary" @click="submitForm(formRef)" :loading="loading">
         保 存
       </el-button>
-      <el-button type="primary" @click="resetForm(formRef)" :loading="loading">
-        重 置
-      </el-button>
+      <el-button v-if="!form.id" @click="resetForm(formRef)"> 重 置 </el-button>
     </el-form-item>
   </el-form>
 </template>
