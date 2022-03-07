@@ -40,8 +40,25 @@ const router = createRouter({
             },
             {
               path: ":id",
-              name: "user-retrieve",
-              component: () => import("@/views/user/RetrieveView.vue"),
+              name: "user-read",
+              component: () => import("@/views/user/ReadView.vue"),
+              props: true,
+            },
+          ],
+        },
+        {
+          path: "role",
+          component: () => import("@/views/role/IndexView.vue"),
+          children: [
+            {
+              path: "",
+              name: "role",
+              component: () => import("@/views/role/AdminView.vue"),
+            },
+            {
+              path: ":id/resource",
+              name: "role-resource",
+              component: () => import("@/views/role/RoleResource.vue"),
               props: true,
             },
           ],

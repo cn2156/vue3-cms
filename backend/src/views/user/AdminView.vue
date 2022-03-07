@@ -122,11 +122,11 @@ const handleCurrentChange = (val) => {
 import { useRouter } from "vue-router";
 const router = useRouter();
 
-const handleRetrieve = (row) => {
-  router.push({ name: "user-retrieve", params: { id: row.id } });
+const handleRead = (row) => {
+  router.push({ name: "user-read", params: { id: row.id } });
 };
 
-const handleEdit = (row) => {
+const handleUpdate = (row) => {
   router.push({ name: "user-update", params: { id: row.id } });
 };
 
@@ -159,7 +159,7 @@ const handleDelete = (row) => {
           type="text"
           @click="$router.push({ name: 'user-create' })"
         >
-          添加用户
+          新建用户
         </el-button>
       </div>
     </template>
@@ -263,11 +263,15 @@ const handleDelete = (row) => {
       </el-table-column>
       <el-table-column label="操作" align="center" width="200">
         <template #default="scope">
-          <el-button size="small" @click="handleRetrieve(scope.row)">
+          <el-button size="small" @click="handleRead(scope.row)">
             查看
           </el-button>
-          <el-button size="small" type="success" @click="handleEdit(scope.row)">
-            编辑
+          <el-button
+            size="small"
+            type="success"
+            @click="handleUpdate(scope.row)"
+          >
+            更新
           </el-button>
           <el-button
             size="small"

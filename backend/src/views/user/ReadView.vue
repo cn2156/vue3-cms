@@ -57,7 +57,7 @@ const statusColor = computed(() =>
   <el-card class="box-card">
     <template #header>
       <div class="card-header flex flex-between flex-middle">
-        <span>用户信息</span>
+        <span>查看用户</span>
         <el-button class="button" type="text" @click="$router.go(-1)">
           返回
         </el-button>
