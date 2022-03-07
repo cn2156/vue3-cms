@@ -68,11 +68,6 @@ const statuses = {
     value: "2",
     color: "danger",
   },
-  DELETED: {
-    text: "已删除",
-    value: "3",
-    color: "info",
-  },
 };
 
 /**
