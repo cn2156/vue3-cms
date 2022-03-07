@@ -136,6 +136,11 @@ const submitForm = async (formEl) => {
     console.log(err);
   }
 };
+
+const resetForm = (formEl) => {
+  if (!formEl) return;
+  formEl.resetFields();
+};
 </script>
 
 <template>
@@ -163,7 +168,7 @@ const submitForm = async (formEl) => {
         :placeholder="form.id ? '不更改密码请留空' : ''"
       ></el-input>
     </el-form-item>
-    <el-form-item :label="fields.status">
+    <el-form-item :label="fields.status" prop="status">
       <el-select v-model="form.status" placeholder="请选择状态">
         <el-option
           v-for="(status, key) in statuses"
@@ -177,7 +182,7 @@ const submitForm = async (formEl) => {
       <el-button type="primary" @click="submitForm(formRef)" :loading="loading">
         保 存
       </el-button>
-      <el-button type="primary" @click="submitForm(formRef)" :loading="loading">
+      <el-button type="primary" @click="resetForm(formRef)" :loading="loading">
         重 置
       </el-button>
     </el-form-item>
