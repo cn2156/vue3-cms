@@ -15,7 +15,7 @@ const props = defineProps({
     type: [String, Number],
     default: 2,
   },
-  avatar: {
+  modelValue: {
     type: String,
     default: "",
   },
@@ -51,14 +51,13 @@ const handleChange = (file) => {
   imageUrl.value = URL.createObjectURL(file.raw);
 };
 
-const emits = defineEmits(["update:avatar"]);
+const emits = defineEmits(["update:modelValue"]);
 const handleUpload = () => {
   setTimeout(() => {
     // 01~10
     const num = Math.floor(Math.random() * (10 - 1 + 1) + 1);
     const fileName = `/avatar/avatar${String(num).padStart(2, "0")}.png`;
-    console.log(fileName);
-    emits("update:avatar", fileName);
+    emits("update:modelValue", fileName);
     ElMessage.success("上传成功");
   }, 1000);
 };

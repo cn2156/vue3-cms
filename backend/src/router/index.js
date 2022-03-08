@@ -65,8 +65,31 @@ const router = createRouter({
         },
         {
           path: "category",
-          name: "category",
           component: () => import("@/views/category/IndexView.vue"),
+          children: [
+            {
+              path: "",
+              name: "category",
+              component: () => import("@/views/category/AdminView.vue"),
+            },
+            {
+              path: "create",
+              name: "category-create",
+              component: () => import("@/views/category/CreateView.vue"),
+            },
+            {
+              path: ":id/update",
+              name: "category-update",
+              component: () => import("@/views/category/UpdateView.vue"),
+              props: true,
+            },
+            {
+              path: ":id",
+              name: "category-read",
+              component: () => import("@/views/category/ReadView.vue"),
+              props: true,
+            },
+          ],
         },
       ],
     },

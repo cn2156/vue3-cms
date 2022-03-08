@@ -1,14 +1,15 @@
 <script setup>
 import { ref, reactive } from "vue";
-import md5 from "md5";
 import UploadFile from "@/components/UploadFile.vue";
 import {
-  getUser,
   getFields,
   getStatuses,
   getStatusDefaultValue,
-  getAllowBackendsValues,
-} from "../../../api/user";
+  getIsCommonsValues,
+  getCategory,
+  getOneLevelCategories,
+  createOrUpdateCategory,
+} from "../../../api/category";
 
 const props = defineProps({
   id: {
@@ -17,85 +18,54 @@ const props = defineProps({
   },
 });
 
+const oneLevelCategories = ref([]);
+const getOneLevelCategoryList = async () => {
+  const data = await getOneLevelCategories();
+  if (data.code === "000000") {
+    oneLevelCategories.value = data.data;
+  }
+};
+getOneLevelCategoryList();
+
 const fields = getFields();
+const isCommons = getIsCommonsValues();
 const statuses = getStatuses();
-const allowBackendsValues = getAllowBackendsValues();
 
 const loading = ref(false);
 const formRef = ref();
 let form = ref({
-  phone: "",
-  pwd: "",
   name: "",
-  avatar: "",
-  allow_backend: allowBackendsValues.ENABLED,
+  code: "",
+  parent_id: 0,
+  cover_img: "",
+  is_common: isCommons.ENABLED,
+  display_order: 0,
   status: getStatusDefaultValue(),
 });
 
-let oldPwd = "";
-const getUserInfo = async (id) => {
-  const data = await getUser({ id });
+const getCategoryInfo = async (id) => {
+  const data = await getCategory({ id });
   if (data.code === "000000" && data.data) {
     form.value = data.data;
-    // 有密码置空，以便于不修改密码
-    if (data.data.pwd) {
-      oldPwd = data.data.pwd;
-      form.value.pwd = "";
-      rules.pwd[0].required = false;
-    }
   }
 };
 if (props.id) {
-  getUserInfo(props.id);
+  getCategoryInfo(props.id);
 }
 
-const checkAllowBackend = (rule, value) => {
-  if (!oldPwd) {
-    rules.pwd[0].required = value;
-    if (!value) {
-      formRef.value.clearValidate("pwd");
-    }
-  }
-  return true;
-};
-
 const rules = reactive({
-  phone: [
-    {
-      required: true,
-      message: "请输入手机号",
-      trigger: "blur",
-    },
-    {
-      pattern: /^1\d{10}$/,
-      message: "请输入正确的手机号",
-      trigger: "blur",
-    },
-  ],
   name: [
     {
       required: true,
-      message: "请输入姓名",
+      message: "请输入栏目名称",
       trigger: "blur",
     },
   ],
-  pwd: [
+  code: [
     {
       required: true,
-      message: "请输入密码",
+      message: "请输入栏目编码",
       trigger: "blur",
-    },
-    {
-      min: 6,
-      max: 12,
-      message: "密码6~12位",
-      trigger: "blur",
-    },
-  ],
-  allow_backend: [
-    {
-      validator: checkAllowBackend,
-      trigger: "change",
     },
   ],
   status: [
@@ -107,7 +77,6 @@ const rules = reactive({
   ],
 });
 
-import { createOrUpdateUser } from "@/api/user";
 import { useRouter } from "vue-router";
 const router = useRouter();
 
@@ -119,15 +88,10 @@ const submitForm = async (formEl) => {
   try {
     await formEl.validate();
     loading.value = true;
-
-    // 有密码：密码为空时表示不修改密码
-    const formData = { ...form.value };
-    formData.pwd = formData.pwd ? md5(formData.pwd) : oldPwd ? oldPwd : "";
-
-    const data = await createOrUpdateUser(formData);
+    const data = await createOrUpdateCategory(form.value);
     if (data.code === "000000") {
       ElMessage.success("保存成功");
-      router.push({ name: "user" });
+      router.push({ name: "category" });
     } else {
       ElMessage.error(data.message);
     }
@@ -145,28 +109,28 @@ const resetForm = (formEl) => {
 
 <template>
   <el-form ref="formRef" :model="form" :rules="rules" label-width="120px">
-    <el-form-item :label="fields.phone" prop="phone">
-      <el-input v-model="form.phone" autocomplete="off"></el-input>
-    </el-form-item>
     <el-form-item :label="fields.name" prop="name">
       <el-input v-model="form.name"></el-input>
     </el-form-item>
-    <el-form-item :label="fields.avatar" prop="avatar">
-      <UploadFile v-model="form.avatar" />
+    <el-form-item :label="fields.code" prop="code">
+      <el-input v-model="form.code"></el-input>
     </el-form-item>
-    <el-form-item :label="fields.allow_backend" prop="allow_backend">
-      <el-switch
-        v-model="form.allow_backend"
-        :active-value="allowBackendsValues.ENABLED"
-        :inactive-value="allowBackendsValues.DISABLED"
-      ></el-switch>
+    <el-form-item :label="fields.parent_id" prop="parent_id">
+      <el-select v-model="form.parent_id" placeholder="请选择">
+        <el-option label="请选择" :value="0"></el-option>
+        <el-option
+          v-for="item in oneLevelCategories"
+          :key="item.id"
+          :label="item.nameWithStatus"
+          :value="item.id"
+        ></el-option>
+      </el-select>
     </el-form-item>
-    <el-form-item :label="fields.pwd" prop="pwd">
-      <el-input
-        type="password"
-        v-model="form.pwd"
-        :placeholder="form.id ? '不更改密码请留空' : ''"
-      ></el-input>
+    <el-form-item :label="fields.cover_img" prop="cover_img">
+      <UploadFile v-model="form.cover_img" />
+    </el-form-item>
+    <el-form-item :label="fields.display_order" prop="display_order">
+      <el-input type="number" v-model="form.display_order"></el-input>
     </el-form-item>
     <el-form-item :label="fields.status" prop="status">
       <el-select v-model="form.status" placeholder="请选择状态">
