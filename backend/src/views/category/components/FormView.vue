@@ -5,7 +5,6 @@ import {
   getFields,
   getStatuses,
   getStatusDefaultValue,
-  getIsCommonsValues,
   getCategory,
   getOneLevelCategories,
   createOrUpdateCategory,
@@ -28,7 +27,6 @@ const getOneLevelCategoryList = async () => {
 getOneLevelCategoryList();
 
 const fields = getFields();
-const isCommons = getIsCommonsValues();
 const statuses = getStatuses();
 
 const loading = ref(false);
@@ -38,7 +36,6 @@ let form = ref({
   code: "",
   parent_id: 0,
   cover_img: "",
-  is_common: isCommons.ENABLED,
   display_order: 0,
   status: getStatusDefaultValue(),
 });

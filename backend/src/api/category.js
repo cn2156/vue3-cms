@@ -30,9 +30,6 @@ const fields = {
   desc: {
     text: "栏目简介",
   },
-  is_common: {
-    text: "普通栏目",
-  },
   status: {
     text: "状态",
   },
@@ -96,34 +93,6 @@ export const getStatuses = () => getObjectValueProperties(statuses, "text");
 export const getStatusDefaultValue = () => statuses.ACTIVED.value;
 
 /**
- * 普通栏目
- */
-const isCommons = {
-  ENABLED: {
-    text: "是",
-    value: 1,
-    color: "success",
-  },
-  DISABLED: {
-    text: "否",
-    value: 0,
-    color: "danger",
-  },
-};
-
-/**
- * 获得普通栏目属性和值
- * @returns {Object}
- */
-export const getIsCommonsValues = () => getObjectProperties(isCommons);
-
-/**
- * 获得普通栏目值和文本
- * @returns {Object}
- */
-export const getIsCommons = () => getObjectValueProperties(isCommons, "text");
-
-/**
  * 获得栏目信息
  * @param {Object} params 参数
  * @returns {Object}
@@ -151,7 +120,6 @@ export const getCategory = async (params) => {
 export const getCategories = async (params) => {
   params._sort = "display_order,id";
   params._order = "desc,asc";
-  params.is_common = isCommons.ENABLED.value;
 
   const res = await request({
     method: "GET",
@@ -200,7 +168,6 @@ export const getOneLevelCategories = async (params = {}) => {
   params.parent_id = 0;
   params._sort = "display_order,id";
   params._order = "desc,asc";
-  params.is_common = isCommons.ENABLED.value;
 
   const res = await request({
     method: "GET",
@@ -217,7 +184,7 @@ export const getOneLevelCategories = async (params = {}) => {
         item.name +
         (item.status === statuses.ACTIVED.value
           ? ""
-          : "[" + statusesValues[item.status] + "]");
+          : " [" + statusesValues[item.status] + "]");
     });
   }
 

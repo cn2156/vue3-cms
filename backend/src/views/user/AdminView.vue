@@ -122,6 +122,10 @@ const handleCurrentChange = (val) => {
 import { useRouter } from "vue-router";
 const router = useRouter();
 
+const handleAllocateResource = () => {
+  return false;
+};
+
 const handleRead = (row) => {
   router.push({ name: "user-read", params: { id: row.id } });
 };
@@ -261,8 +265,15 @@ const handleDelete = (row) => {
           {{ statusText(scope.row.status) }}
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="200">
+      <el-table-column label="操作" align="center" width="280">
         <template #default="scope">
+          <el-button
+            size="small"
+            type="info"
+            @click="handleAllocateResource(scope.row)"
+          >
+            分配角色
+          </el-button>
           <el-button size="small" @click="handleRead(scope.row)">
             查看
           </el-button>
@@ -296,6 +307,34 @@ const handleDelete = (row) => {
       @current-change="handleCurrentChange"
     >
     </el-pagination>
+
+    <el-dialog
+      v-model="dialogFormVisible"
+      :title="dialogTitle"
+      :before-close="handleBeforeClose"
+    >
+      <FormViewVue
+        ref="createUpdateForm"
+        :id="updateId"
+        @submit-success="handleSuccess"
+      />
+      <template #footer>
+        <span class="dialog-footer">
+          <template
+            v-if="dialogAction === 'create' || dialogAction === 'update'"
+          >
+            <el-button @click="handleClose"> 取消 </el-button>
+            <el-button type="primary" @click="handleSave"> 保存 </el-button>
+          </template>
+          <el-button
+            v-if="dialogAction === 'read'"
+            @click="dialogFormVisible = false"
+          >
+            关闭
+          </el-button>
+        </span>
+      </template>
+    </el-dialog>
   </el-card>
 </template>
 
